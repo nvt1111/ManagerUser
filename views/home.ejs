@@ -75,18 +75,10 @@ $(document).ready(function(){
 					<%if(user.length>0) {%>
 						<%user.forEach(users=>{%>
 					<tr>
-						<!-- <td>
-							<span class="custom-checkbox">
-								 <input type="checkbox" id="<%=users._id%>" name="options[]" value="1"> -->
-								<!-- thay vì đẻ value=1 thì để value="<%= users._id %>" -->
-								<!-- <input type="checkbox" id="checkbox1" name="options[]" value="<%= users._id %>">
-								<label for="checkbox1"></label>
-							</span>
-						</td> --> 
 						<td>
 							<span class="custom-checkbox">
-								<input type="checkbox" class="checkbox" name="options[]" value="<%= users._id %>" data-id="<%= users._id %>">
-								<label></label>
+								<input type="checkbox" id="checkbox1" name="options[]" value="1">
+								<label for="checkbox1"></label>
 							</span>
 						</td>
 						<td><%=users.name%></td>
@@ -121,21 +113,36 @@ $(document).ready(function(){
 </div>
 
 <script>
-	const trashcan = document.querySelector('a.delete');
+	const deleteButtons  = document.querySelectorAll('a.delete'); // để tránh việc chỉ xoá đc dòng đầu thì ta chọn tất cả các dòng có thể xoá
 
-	trashcan.addEventListener('click', (e) => {
-	  const endpoint = `/users/${trashcan.dataset.doc}`;
+	deleteButtons.forEach((button) => {
+  button.addEventListener('click', (e) => {
+    const endpoint = `/users/${button.dataset.doc}`;
 
-	  fetch(endpoint, {
-		method: 'DELETE',
-	  })
-	  .then(response => response.json())
+    fetch(endpoint, {
+      method: 'DELETE',
+    })
+    .then(response => response.json())
+    .then((data) => {
+      window.location.href = data.redirect;
+    })
+    .catch(err => console.log(err));
+  });
+});
+
+	// trashcan.addEventListener('click', (e) => {
+	//   const endpoint = `/users/${trashcan.dataset.doc}`;
+
+	//   fetch(endpoint, {
+	// 	method: 'DELETE',
+	//   })
+	//   .then(response => response.json())
 	  
-	  .then((data) =>{
-		window.location.href = data.redirect
-	  } )
-	  .catch(err => console.log(err));
-	});
+	//   .then((data) =>{
+	// 	window.location.href = data.redirect
+	//   } )
+	//   .catch(err => console.log(err));
+	// });
 	
   </script>
 </body>
